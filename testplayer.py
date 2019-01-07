@@ -3,7 +3,8 @@
 
 from playsound import playsound
 
-file = 'K:\\Music\\Hotline Miami 2 OST\\Soundtrack\\49 Escape From Midwitch Valley.mp3'
+file = '<filename>'
+
 
 def _playsoundWin(sound, block = True):
     '''

@@ -1,7 +1,7 @@
 """Python 3 CLI audio player
 """
 
-file = 'K:\\Music\\Hotline Miami 2 OST\\Soundtrack\\49 Escape From Midwitch Valley.mp3'
+file = '<filename>'
 
 from ctypes import c_buffer, windll
 from random import random
