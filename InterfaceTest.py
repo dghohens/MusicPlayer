@@ -45,7 +45,9 @@ def file_window(subdirs, selected_subdirs):
             a = a[0:32] + '...'
         if len(b) > 36:
             b = b[0:32] + '...'
-        print('\n' +'│' + {midwidth}.format(a) + '│  │' + {midwidth}.format(b) + '│', end = '')
+        # https://stackoverflow.com/questions/29044940/how-can-you-use-a-variable-name-inside-a-python-format-specifier
+        print('\n' +'│' + '{:{midwidth}}'.format(a, midwidth = midwidth) + '│  │' + '{:{midwidth}}'.format(b, midwidth = midwidth) + '│', end = '')
+        # print('\n' +'│' + '{:{}}'.format(a, midwidth) + '│ │' + '{:{}}'.format(b, midwidth) + '│', end = '')
     #print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
     #print('\033[F' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
     print('\n' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
