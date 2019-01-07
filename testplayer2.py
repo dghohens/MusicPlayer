@@ -1,8 +1,6 @@
 """Python 3 CLI audio player
 """
 
-from playsound import playsound
-
 file = 'K:\\Music\\Hotline Miami 2 OST\\Soundtrack\\49 Escape From Midwitch Valley.mp3'
 
 from ctypes import c_buffer, windll
@@ -27,14 +25,9 @@ alias = 'playsound_' + str(random())
 winCommand('open "' + file + '" alias', alias)
 winCommand('set', alias, 'time format milliseconds')
 durationInMS = winCommand('status', alias, 'length')
-print(durationInMS)
 totaldur = int(durationInMS)//1000
-print(totaldur)
-# winCommand('play', alias, 'from 0 to', durationInMS.decode())
+winCommand('play', alias, 'from 0 to', durationInMS.decode())
 
-for i in range(totaldur):
+for i in range(1, totaldur):
     sleep(1)
-    print(i, '/', totaldur)
-    winCommand('play', alias, 'from ', str((i * 1000)), ' to', str((i * 1000) + 1000 ))
-
-#sleep(float(durationInMS) / 1000.0)
+    print('\r' + str(i//60) + ':' + '{:02}'.format(i%60) + '/' + str(totaldur//60) + ':' + '{:02}'.format(totaldur%60), end = '')
