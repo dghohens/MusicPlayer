@@ -1,0 +1,37 @@
+# Music player config file
+
+[Directories]
+Base directory: 
+Logging directory:
+
+[Interface sizing]
+Session width: 80
+Session height: 25
+
+[Interface colors]
+Background = Back.BLACK
+File foreground: Fore.GREEN
+Music foreground: Fore.YELLOW
+File selection: Back.YELLOW
+Music selection: Back.GREEN
+
+[Key bindings]
+Exit: ctrl-q
+Play:  KEY_SPACE
+Pause: KEY_SPACE
+Stop : s
+Next song: d
+Previous song: a
+Toggle shuffle: x
+Volume up: =
+Volume down: -
+Play faster: >
+Play slower: <
+File view: KEY_ESC
+Help: ?
+
+Select next: KEY_DOWN
+Select previous: KEY_UP
+Parent directory: KEY_LEFT
+Child directory: KEY_RIGHT
+Play directory: KEY_ENTER
