@@ -1,5 +1,5 @@
 from colorama import init, Fore, Back, Style
-import os, configparser
+import os, configparser, msvcrt
 
 init()
 
@@ -15,6 +15,61 @@ file_fore = config['Interface colors']['File foreground']
 file_select = config['Interface colors']['File selection']
 
 parent_directory = config['Directories']['Base directory']
+
+def key_press(key):
+    # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
+    if key == 17:
+        # Quit
+        pass
+    if key == 32:
+        # pause/play
+        pass
+    if key == 115
+        # stop
+        pass
+    if key == 100:
+        # skip forward
+        pass
+    if key == 97:
+        # skip backward
+        pass
+    if key == 120:
+        # toggle shuffle
+        pass
+    if key == 61:
+        # turn up volume
+        pass
+    if key == 45:
+        # turn down volume
+        pass
+    if key == 62:
+        # play faster
+        pass
+    if key == 60:
+        # play slower
+        pass
+    if key == 27:
+        # Go to file view
+        pass
+    if key == 63:
+        # display help page
+        pass
+    if key == 80:
+        # Select next directory
+    if key == 72:
+        # select previous directory
+        pass
+    if key == 75:
+        # Go up a level
+        pass
+    if key == 77:
+        # Go down a level
+        pass
+    if key == 13:
+        # start playing
+        pass
+    pass
+
 
 def abbrev_list(inlist):
     # Abbreviate list if it's too long
@@ -73,7 +128,21 @@ def get_dir(current_working_directory, selected_directory = None):
     return subdirs, selected_subdirs
 
 dirs = get_dir(parent_directory)
+selected_dir = parent_directory + dirs[0][0]
 
 file_window(dirs[0], dirs[1])
+
+
+dirs = get_dir(parent_directory, selected_dir)
+# https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
+key = ord(msvcrt.getch())
+key = ord(msvcrt.getch())
+print(key)
+
+if key == 80:
+    selected_dir = parent_directory + dirs[0][1]
+    dirs = get_dir(parent_directory, selected_dir)
+    os.system('cls')
+    file_window(dirs[0], dirs[1])
 
 # When a key is pressed, clear screen and redraw https://stackoverflow.com/questions/2084508/clear-terminal-in-python
