@@ -16,59 +16,107 @@ file_select = config['Interface colors']['File selection']
 
 parent_directory = config['Directories']['Base directory']
 
+run = True
+
 def key_press(key):
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
+    action = ''
     if key == 17:
         # Quit
-        pass
+        action = 'quit'
     if key == 32:
         # pause/play
-        pass
-    if key == 115
+        action = 'pauseplay'
+    if key == 115:
         # stop
-        pass
+        action = 'stop'
     if key == 100:
         # skip forward
-        pass
+        action = 'fskip'
     if key == 97:
         # skip backward
-        pass
+        action = 'bskip'
     if key == 120:
         # toggle shuffle
-        pass
+        action = 'shuffleonoff'
     if key == 61:
         # turn up volume
-        pass
+        action = 'upvolume'
     if key == 45:
         # turn down volume
-        pass
+        action = 'downvolume'
     if key == 62:
         # play faster
-        pass
+        action = 'speedup'
     if key == 60:
         # play slower
-        pass
+        action = 'slowdown'
     if key == 27:
         # Go to file view
-        pass
+        action = 'fileview'
     if key == 63:
         # display help page
-        pass
+        action = 'help'
     if key == 80:
         # Select next directory
+        action = 'nextdir'
     if key == 72:
         # select previous directory
-        pass
+        action = 'prevdir'
     if key == 75:
         # Go up a level
-        pass
+        action = 'uplevel'
     if key == 77:
         # Go down a level
-        pass
+        action = 'downlevel'
     if key == 13:
         # start playing
-        pass
+        action = 'play'
+    return action
+
+def colors(fore = white, back = black):
+    fore = lower(fore)
+    back = lower(back)
+    # BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE
+    # Fores
+    if fore == 'black':
+        print(Fore.BLACK, '')
+    if fore == 'red':
+        print(Fore.RED, '')
+    if fore == 'green':
+        print(Fore.GREEN, '')
+    if fore == 'yellow':
+        print(Fore.YELLOW, '')
+    if fore == 'blue':
+        print(Fore.BLUE, '')
+    if fore == 'magenta':
+        print(Fore.MAGENTA, '')
+    if fore == 'cyan':
+        print(Fore.CYAN, '')
+    if fore == 'white':
+        print(Fore.WHITE, '')
+    # Backs down here
+    if back == 'black':
+        print(Back.BLACK, '')
+    if back == 'red':
+        print(Back.RED, '')
+    if back == 'green':
+        print(Back.GREEN, '')
+    if back == 'yellow':
+        print(Back.YELLOW, '')
+    if back == 'blue':
+        print(Back.BLUE, '')
+    if back == 'magenta':
+        print(Back.MAGENTA, '')
+    if back == 'cyan':
+        print(Back.CYAN, '')
+    if back == 'white':
+        print(Back.WHITE, '')
     pass
+
+def actions(action):
+    if action == 'nextdir':
+        pass
 
 
 def abbrev_list(inlist):
@@ -105,7 +153,7 @@ def player_window():
 
 def file_window(subdirs, selected_subdirs):
     global file_fore, background, midwidth
-    print(file_fore, '')
+    print(Fore.file_fore, '')
     print(background, '')
     print('┌=[' + '{:^{midwidth}}'.format('Parent Folder Contents', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Selected Folder Contents', midwidth = midwidth - 6) + ']──┐', end='')
     for i in range(session_height - 2):

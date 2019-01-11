@@ -9,11 +9,11 @@ Session width: 80
 Session height: 25
 
 [Interface colors]
-Background = Back.BLACK
-File foreground: Fore.GREEN
-Music foreground: Fore.YELLOW
-File selection: Back.YELLOW
-Music selection: Back.GREEN
+Background = BLACK
+File foreground: GREEN
+Music foreground: YELLOW
+File selection: YELLOW
+Music selection: GREEN
 
 [Key bindings]
 Exit: ctrl-q
