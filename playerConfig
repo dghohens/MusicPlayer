@@ -1,7 +1,7 @@
 # Music player config file
 
 [Directories]
-Base directory: 
+Base directory: K:\Music\Ratatat
 Logging directory:
 
 [Interface sizing]
@@ -12,8 +12,8 @@ Session height: 25
 Background = BLACK
 File foreground: GREEN
 Music foreground: YELLOW
-File selection: YELLOW
-Music selection: GREEN
+File selection: MAGENTA
+Music selection: CYAN
 
 [Key bindings]
 Exit: ctrl-q

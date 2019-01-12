@@ -17,8 +17,11 @@ file_select = config['Interface colors']['File selection']
 parent_directory = config['Directories']['Base directory']
 
 run = True
+dircounter = 0
+os.system('cls')
 
-def key_press(key):
+
+def key_press(inkey):
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     action = ''
     if key == 17:
@@ -74,45 +77,47 @@ def key_press(key):
         action = 'play'
     return action
 
-def colors(fore = white, back = black):
-    fore = lower(fore)
-    back = lower(back)
+
+def colors(fore = 'white', back = 'black'):
+    fore = fore.lower()
+    back = back.lower()
     # BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE
     # Fores
     if fore == 'black':
-        print(Fore.BLACK, '')
+        print(Fore.BLACK, '', end='')
     if fore == 'red':
-        print(Fore.RED, '')
+        print(Fore.RED, '', end='')
     if fore == 'green':
-        print(Fore.GREEN, '')
+        print(Fore.GREEN, '', end='')
     if fore == 'yellow':
-        print(Fore.YELLOW, '')
+        print(Fore.YELLOW, '', end='')
     if fore == 'blue':
-        print(Fore.BLUE, '')
+        print(Fore.BLUE, '', end='')
     if fore == 'magenta':
-        print(Fore.MAGENTA, '')
+        print(Fore.MAGENTA, '', end='')
     if fore == 'cyan':
-        print(Fore.CYAN, '')
+        print(Fore.CYAN, '', end='')
     if fore == 'white':
-        print(Fore.WHITE, '')
+        print(Fore.WHITE, '', end='')
     # Backs down here
     if back == 'black':
-        print(Back.BLACK, '')
+        print(Back.BLACK, '', end='')
     if back == 'red':
-        print(Back.RED, '')
+        print(Back.RED, '', end='')
     if back == 'green':
-        print(Back.GREEN, '')
+        print(Back.GREEN, '', end='')
     if back == 'yellow':
-        print(Back.YELLOW, '')
+        print(Back.YELLOW, '', end='')
     if back == 'blue':
-        print(Back.BLUE, '')
+        print(Back.BLUE, '', end='')
     if back == 'magenta':
-        print(Back.MAGENTA, '')
+        print(Back.MAGENTA, '', end='')
     if back == 'cyan':
-        print(Back.CYAN, '')
+        print(Back.CYAN, '', end='')
     if back == 'white':
-        print(Back.WHITE, '')
+        print(Back.WHITE, '', end='')
     pass
+
 
 def actions(action):
     if action == 'nextdir':
@@ -151,10 +156,10 @@ def player_window():
     print('\033[F' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
 
 
-def file_window(subdirs, selected_subdirs):
-    global file_fore, background, midwidth
-    print(Fore.file_fore, '')
-    print(background, '')
+def file_window(subdirs, selected_subdirs, selected_dir):
+    global file_fore, background, midwidth, file_select
+    colors(file_fore, background)
+    print()
     print('┌=[' + '{:^{midwidth}}'.format('Parent Folder Contents', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Selected Folder Contents', midwidth = midwidth - 6) + ']──┐', end='')
     for i in range(session_height - 2):
         c = abbrev_list(subdirs)
@@ -162,35 +167,62 @@ def file_window(subdirs, selected_subdirs):
         a = abbrev_file(c[i])
         b = abbrev_file(d[i])
         # https://stackoverflow.com/questions/29044940/how-can-you-use-a-variable-name-inside-a-python-format-specifier
-        print('\n' +'│' + '{:{midwidth}}'.format(a, midwidth = midwidth) + '│  │' + '{:{midwidth}}'.format(b, midwidth = midwidth) + '│', end = '')
+        if subdirs[i] == selected_dir:
+            print('\n' + '│', end='')
+            colors(file_fore, file_select)
+            print('{:{midwidth}}'.format(a, midwidth=midwidth - 4), end='')
+            colors(file_fore, background)
+            print('│  │' + '{:{midwidth}}'.format(b, midwidth=midwidth) + '│', end='')
+        else:
+            print('\n' +'│' + '{:{midwidth}}'.format(a, midwidth = midwidth) + '│  │' + '{:{midwidth}}'.format(b, midwidth = midwidth) + '│', end='')
         # print('\n' +'│' + '{:{}}'.format(a, midwidth) + '│ │' + '{:{}}'.format(b, midwidth) + '│', end = '')
     #print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
     #print('\033[F' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
     print('\n' + '└' + '─' * midwidth + '┘  └' + '─' * midwidth + '┘')
 
+
 def get_dir(current_working_directory, selected_directory = None):
     subdirs = os.listdir(current_working_directory)
     if selected_directory == None:
-        selected_directory = current_working_directory + subdirs[0]
-    selected_subdirs = os.listdir(selected_directory)
+        selected_directory = subdirs[0]
+    selected_subdirs = os.listdir(current_working_directory + '\\' + selected_directory)
     return subdirs, selected_subdirs
 
+
 dirs = get_dir(parent_directory)
-selected_dir = parent_directory + dirs[0][0]
+selected_dir = dirs[0][0]
 
-file_window(dirs[0], dirs[1])
+file_window(dirs[0], dirs[1], selected_dir)
 
-
-dirs = get_dir(parent_directory, selected_dir)
-# https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
-key = ord(msvcrt.getch())
-key = ord(msvcrt.getch())
-print(key)
-
-if key == 80:
-    selected_dir = parent_directory + dirs[0][1]
+while run:
     dirs = get_dir(parent_directory, selected_dir)
-    os.system('cls')
-    file_window(dirs[0], dirs[1])
+    # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
+    key = ord(msvcrt.getch())
+    if key == 224:
+        key = ord(msvcrt.getch())
+    if key_press(key) == 'nextdir':
+        try:
+            dircounter += 1
+            selected_dir = dirs[0][dircounter]
+        except IndexError:
+            dircounter = 0
+            selected_dir = dirs[0][dircounter]
+        dirs = get_dir(parent_directory, selected_dir)
+        os.system('cls')
+        print(parent_directory)
+        file_window(dirs[0], dirs[1], selected_dir)
+    if key_press(key) == 'prevdir':
+        try:
+            dircounter -= 1
+            selected_dir = dirs[0][dircounter]
+        except IndexError:
+            dircounter = -1
+            selected_dir = dirs[0][dircounter]
+        dirs = get_dir(parent_directory, selected_dir)
+        os.system('cls')
+        file_window(dirs[0], dirs[1], selected_dir)
+    if key_press(key) == 'quit':
+        run = False
+        break
 
 # When a key is pressed, clear screen and redraw https://stackoverflow.com/questions/2084508/clear-terminal-in-python
