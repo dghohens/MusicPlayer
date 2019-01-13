@@ -24,6 +24,7 @@ os.system('cls')
 def key_press(inkey):
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     action = ''
+    type = ''
     if key == 17:
         # Quit
         action = 'quit'
@@ -159,7 +160,7 @@ def player_window():
 def file_window(subdirs, selected_subdirs, selected_dir):
     global file_fore, background, midwidth, file_select
     colors(file_fore, background)
-    print()
+    os.system('cls')
     print('┌=[' + '{:^{midwidth}}'.format('Parent Folder Contents', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Selected Folder Contents', midwidth = midwidth - 6) + ']──┐', end='')
     for i in range(session_height - 2):
         c = abbrev_list(subdirs)
@@ -189,17 +190,54 @@ def get_dir(current_working_directory, selected_directory = None):
     return subdirs, selected_subdirs
 
 
-dirs = get_dir(parent_directory)
-selected_dir = dirs[0][0]
+def dirchange(select_dir=get_dir(current_working_directory=parent_directory), action = '', dir_list = []):
+    global parent_directory, dircounter
+    run = True
+    dirs = get_dir(parent_directory)
+    if action == 'downlevel':
+        dir_list.append(select_dir)
+    if action == 'uplevel':
+        try:
+            del(dir_list[-1])
+        except IndexError:
+            print('You are at the root music directory!')
+    current_dir = parent_directory + '\\'.join(dir_list)
+    if action == 'nextdir':
+        try:
+            dircounter += 1
+            select_dir = dirs[0][dircounter]
+        except IndexError:
+            dircounter = 0
+            selected_dir = dirs[0][dircounter]
+        dirs = get_dir(parent_directory, select_dir)
+        file_window(dirs[0], dirs[1], select_dir)
+    if action == 'prevdir':
+        try:
+            dircounter -= 1
+            select_dir = dirs[0][dircounter]
+        except IndexError:
+            dircounter = -1
+            select_dir = dirs[0][dircounter]
+        dirs = get_dir(parent_directory, select_dir)
+        file_window(dirs[0], dirs[1], select_dir)
+    if action == 'quit':
+        run = False
+    return current_dir, select_dir, dirs, run, dir_list
 
-file_window(dirs[0], dirs[1], selected_dir)
+
+directories = dirchange()
+file_window(directories[2][0], directories[2][1], directories[1])
+
 
 while run:
-    dirs = get_dir(parent_directory, selected_dir)
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     key = ord(msvcrt.getch())
     if key == 224:
         key = ord(msvcrt.getch())
+    if key in [72, 75, 77, 80, 17]:
+        directories = dirchange(directories[1], key_press(key), directories[4])
+        file_window(directories[2][0], directories[2][1], directories[1])
+    '''
     if key_press(key) == 'nextdir':
         try:
             dircounter += 1
@@ -209,7 +247,6 @@ while run:
             selected_dir = dirs[0][dircounter]
         dirs = get_dir(parent_directory, selected_dir)
         os.system('cls')
-        print(parent_directory)
         file_window(dirs[0], dirs[1], selected_dir)
     if key_press(key) == 'prevdir':
         try:
@@ -224,5 +261,6 @@ while run:
     if key_press(key) == 'quit':
         run = False
         break
+    '''
 
 # When a key is pressed, clear screen and redraw https://stackoverflow.com/questions/2084508/clear-terminal-in-python
