@@ -18,6 +18,7 @@ parent_directory = config['Directories']['Base directory']
 
 run = True
 dircounter = 0
+dirlist = []
 os.system('cls')
 
 
@@ -157,7 +158,7 @@ def player_window():
     print('\033[F' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
 
 
-def file_window(subdirs, selected_subdirs, selected_dir):
+def file_window(subdirs, selected_dir, selected_subdirs):
     global file_fore, background, midwidth, file_select
     colors(file_fore, background)
     os.system('cls')
@@ -183,54 +184,61 @@ def file_window(subdirs, selected_subdirs, selected_dir):
     pass
 
 
-def get_dir(current_working_directory, selected_directory = None):
+def get_dir(current_working_directory, selected_directory=None):
+    # Given the working directory and an optional selected directory, return the child and subchild directories.
     subdirs = os.listdir(current_working_directory)
     if selected_directory == None:
         selected_directory = subdirs[0]
     selected_subdirs = os.listdir(current_working_directory + '\\' + selected_directory)
-    return subdirs, selected_subdirs
+    return subdirs, selected_directory, selected_subdirs
 
 
-def dirchange(select_dir=get_dir(current_working_directory=parent_directory), action='', dir_list=[]):
-    global parent_directory, dircounter, run
+def dirchange(current_working_directory, selected_directory, action=''):
+    # Change directory based on an action. Maintains a directory list for going up/down levels.
+    global parent_directory, dircounter, run, dirlist
     run = True
-    dirs = get_dir(parent_directory)
     if action == 'downlevel':
-        dirs = get_dir(parent_directory + '\\' + select_dir)
-        dir_list.append(select_dir)
+        dirlist.append(selected_directory)
+        current_working_directory = parent_directory + '\\' + '\\'.join(dirlist)
+        selected_directory = get_dir(current_working_directory)[1]
+        return current_working_directory, selected_directory
     if action == 'uplevel':
         try:
-            del(dir_list[-1])
+            del(dirlist[-1])
+            current_working_directory = parent_directory + '\\' + '\\'.join(dirlist)
+            selected_directory = get_dir(current_working_directory)[1]
+            return current_working_directory, selected_directory
         except IndexError:
             print('You are at the root music directory!')
+            return current_working_directory, selected_directory
     if action == 'nextdir':
         try:
             dircounter += 1
-            select_dir = dirs[0][dircounter]
+            selected_directory = get_dir(current_working_directory)[0][dircounter]
+            return current_working_directory, selected_directory
         except IndexError:
             dircounter = 0
-            select_dir = dirs[0][dircounter]
-        dirs = get_dir(parent_directory, select_dir)
-        file_window(dirs[0], dirs[1], select_dir)
+            selected_directory = get_dir(current_working_directory)[0][dircounter]
+            return current_working_directory, selected_directory
     if action == 'prevdir':
         try:
             dircounter -= 1
-            select_dir = dirs[0][dircounter]
+            selected_directory = get_dir(current_working_directory)[0][dircounter]
+            return current_working_directory, selected_directory
         except IndexError:
             dircounter = -1
-            select_dir = dirs[0][dircounter]
-        dirs = get_dir(parent_directory, select_dir)
-        file_window(dirs[0], dirs[1], select_dir)
+            selected_directory = get_dir(current_working_directory)[0][dircounter]
+            return current_working_directory, selected_directory
     if action == 'quit':
         run = False
-    current_dir = parent_directory + '\\' + '\\'.join(dir_list)
-    return current_dir, select_dir, dirs, dir_list
+        return
+    if action == '':
+        return current_working_directory, selected_directory
 
-
-directories = dirchange()
-file_window(directories[2][0], directories[2][1], directories[1][0][0])
-print(directories)
-
+directories = get_dir(parent_directory)
+file_window(directories[0], directories[1], directories[2])
+currentdir = parent_directory
+selected_dir = directories[1]
 
 while run:
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
@@ -238,13 +246,11 @@ while run:
     if key == 224:
         key = ord(msvcrt.getch())
     if key in [72, 75, 77, 80, 17]:
-        directories = dirchange(directories[1], key_press(key), directories[3])
-        print()
-        print(directories[0])
-        print(directories[1])
-        dirs = get_dir(directories[0], directories[1])
-        file_window(directories[2][0], directories[2][1], directories[1])
-        print(directories)
+        directory_change = dirchange(currentdir, selected_dir, key_press(key))
+        currentdir = directory_change[0]
+        selected_dir = directory_change[1]
+        directories = get_dir(currentdir, selected_dir)
+        file_window(directories[0], directories[1], directories[2])
     '''
     if key_press(key) == 'nextdir':
         try:
