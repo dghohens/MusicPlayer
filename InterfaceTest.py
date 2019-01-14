@@ -180,6 +180,7 @@ def file_window(subdirs, selected_subdirs, selected_dir):
     #print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
     #print('\033[F' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
     print('\n' + '└' + '─' * midwidth + '┘  └' + '─' * midwidth + '┘')
+    pass
 
 
 def get_dir(current_working_directory, selected_directory = None):
@@ -190,25 +191,25 @@ def get_dir(current_working_directory, selected_directory = None):
     return subdirs, selected_subdirs
 
 
-def dirchange(select_dir=get_dir(current_working_directory=parent_directory), action = '', dir_list = []):
-    global parent_directory, dircounter
+def dirchange(select_dir=get_dir(current_working_directory=parent_directory), action='', dir_list=[]):
+    global parent_directory, dircounter, run
     run = True
     dirs = get_dir(parent_directory)
     if action == 'downlevel':
+        dirs = get_dir(parent_directory + '\\' + select_dir)
         dir_list.append(select_dir)
     if action == 'uplevel':
         try:
             del(dir_list[-1])
         except IndexError:
             print('You are at the root music directory!')
-    current_dir = parent_directory + '\\'.join(dir_list)
     if action == 'nextdir':
         try:
             dircounter += 1
             select_dir = dirs[0][dircounter]
         except IndexError:
             dircounter = 0
-            selected_dir = dirs[0][dircounter]
+            select_dir = dirs[0][dircounter]
         dirs = get_dir(parent_directory, select_dir)
         file_window(dirs[0], dirs[1], select_dir)
     if action == 'prevdir':
@@ -222,11 +223,13 @@ def dirchange(select_dir=get_dir(current_working_directory=parent_directory), ac
         file_window(dirs[0], dirs[1], select_dir)
     if action == 'quit':
         run = False
-    return current_dir, select_dir, dirs, run, dir_list
+    current_dir = parent_directory + '\\' + '\\'.join(dir_list)
+    return current_dir, select_dir, dirs, dir_list
 
 
 directories = dirchange()
-file_window(directories[2][0], directories[2][1], directories[1])
+file_window(directories[2][0], directories[2][1], directories[1][0][0])
+print(directories)
 
 
 while run:
@@ -235,8 +238,13 @@ while run:
     if key == 224:
         key = ord(msvcrt.getch())
     if key in [72, 75, 77, 80, 17]:
-        directories = dirchange(directories[1], key_press(key), directories[4])
+        directories = dirchange(directories[1], key_press(key), directories[3])
+        print()
+        print(directories[0])
+        print(directories[1])
+        dirs = get_dir(directories[0], directories[1])
         file_window(directories[2][0], directories[2][1], directories[1])
+        print(directories)
     '''
     if key_press(key) == 'nextdir':
         try:
