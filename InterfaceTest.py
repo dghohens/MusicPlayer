@@ -16,7 +16,6 @@ file_select = config['Interface colors']['File selection']
 
 parent_directory = config['Directories']['Base directory']
 
-run = True
 dircounter = 0
 dirlist = []
 os.system('cls')
@@ -27,6 +26,7 @@ def key_press(inkey):
     action = ''
     type = ''
     if key == 17:
+        # No longer in use, keeping it so I remember that ctrl+q is ASCII code 17.
         # Quit
         action = 'quit'
     if key == 32:
@@ -127,8 +127,15 @@ def actions(action):
 
 
 def abbrev_list(inlist):
+    global dircounter, session_height
+    if len(inlist) > session_height - 2 and dircounter > session_height - 4:
+        outlist = ['...']
+        for i in range(session_height - 3):
+            outlist.append(inlist[(i + dircounter) % (session_height - 4)])
+        outlist.append('...')
+        print(outlist)
     # Abbreviate list if it's too long
-    if len(inlist) > session_height - 2:
+    elif len(inlist) > session_height - 2:
         outlist = inlist[0:session_height - 3]
         outlist.append('...')
     # Lengthen list if it's too short
@@ -142,6 +149,7 @@ def abbrev_list(inlist):
 
 
 def abbrev_file(infile):
+    # Abbreviate files/folders that are longer than the display width, add "..." at the end. Shouldn't add "..." for under 4 characters.
     global midwidth
     if len(infile) > midwidth:
         outfile = infile[:midwidth - 3] + '...'
@@ -149,6 +157,16 @@ def abbrev_file(infile):
         outfile = infile
     return outfile
 
+
+def select_abbrev_file(infile):
+    # Shorten selected files/folders by 4 more than the abbrev_file function. This is because changing colors adds 2 spaces, and I can't figure out how to get rid of it.
+    # Yes, I know this is hacky. Maybe I'll fix it one day.
+    global midwidth
+    if len(infile) > midwidth - 4:
+        outfile = infile[:midwidth - 7] + '...'
+    else:
+        outfile = infile
+    return outfile
 
 def player_window():
     print(Fore.YELLOW, '')
@@ -161,18 +179,19 @@ def player_window():
 def file_window(subdirs, selected_dir, selected_subdirs):
     global file_fore, background, midwidth, file_select
     colors(file_fore, background)
+    # When a key is pressed, clear screen and redraw https://stackoverflow.com/questions/2084508/clear-terminal-in-python
     os.system('cls')
-    print('┌=[' + '{:^{midwidth}}'.format('Parent Folder Contents', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Selected Folder Contents', midwidth = midwidth - 6) + ']──┐', end='')
+    print('┌=[' + '{:^{midwidth}}'.format('Current Folder Contents', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Selected Folder Contents', midwidth = midwidth - 6) + ']──┐', end='')
+    c = abbrev_list(subdirs)
+    d = abbrev_list(selected_subdirs)
     for i in range(session_height - 2):
-        c = abbrev_list(subdirs)
-        d = abbrev_list(selected_subdirs)
         a = abbrev_file(c[i])
         b = abbrev_file(d[i])
         # https://stackoverflow.com/questions/29044940/how-can-you-use-a-variable-name-inside-a-python-format-specifier
         if subdirs[i] == selected_dir:
             print('\n' + '│', end='')
             colors(file_fore, file_select)
-            print('{:{midwidth}}'.format(a, midwidth=midwidth - 4), end='')
+            print('{:{midwidth}}'.format(select_abbrev_file(a), midwidth=midwidth - 4), end='')
             colors(file_fore, background)
             print('│  │' + '{:{midwidth}}'.format(b, midwidth=midwidth) + '│', end='')
         else:
@@ -189,7 +208,10 @@ def get_dir(current_working_directory, selected_directory=None):
     subdirs = os.listdir(current_working_directory)
     if selected_directory == None:
         selected_directory = subdirs[0]
-    selected_subdirs = os.listdir(current_working_directory + '\\' + selected_directory)
+    try:
+        selected_subdirs = os.listdir(current_working_directory + '\\' + selected_directory)
+    except NotADirectoryError:
+        selected_subdirs = []
     return subdirs, selected_directory, selected_subdirs
 
 
@@ -229,52 +251,25 @@ def dirchange(current_working_directory, selected_directory, action=''):
             dircounter = -1
             selected_directory = get_dir(current_working_directory)[0][dircounter]
             return current_working_directory, selected_directory
-    if action == 'quit':
-        run = False
-        return
     if action == '':
         return current_working_directory, selected_directory
+
 
 directories = get_dir(parent_directory)
 file_window(directories[0], directories[1], directories[2])
 currentdir = parent_directory
 selected_dir = directories[1]
 
-while run:
+while True:
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     key = ord(msvcrt.getch())
     if key == 224:
         key = ord(msvcrt.getch())
-    if key in [72, 75, 77, 80, 17]:
+    if key in [72, 75, 77, 80]:
         directory_change = dirchange(currentdir, selected_dir, key_press(key))
         currentdir = directory_change[0]
         selected_dir = directory_change[1]
         directories = get_dir(currentdir, selected_dir)
         file_window(directories[0], directories[1], directories[2])
-    '''
-    if key_press(key) == 'nextdir':
-        try:
-            dircounter += 1
-            selected_dir = dirs[0][dircounter]
-        except IndexError:
-            dircounter = 0
-            selected_dir = dirs[0][dircounter]
-        dirs = get_dir(parent_directory, selected_dir)
-        os.system('cls')
-        file_window(dirs[0], dirs[1], selected_dir)
-    if key_press(key) == 'prevdir':
-        try:
-            dircounter -= 1
-            selected_dir = dirs[0][dircounter]
-        except IndexError:
-            dircounter = -1
-            selected_dir = dirs[0][dircounter]
-        dirs = get_dir(parent_directory, selected_dir)
-        os.system('cls')
-        file_window(dirs[0], dirs[1], selected_dir)
-    if key_press(key) == 'quit':
-        run = False
+    elif key == 17:
         break
-    '''
-
-# When a key is pressed, clear screen and redraw https://stackoverflow.com/questions/2084508/clear-terminal-in-python
