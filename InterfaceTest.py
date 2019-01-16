@@ -130,10 +130,12 @@ def abbrev_list(inlist):
     global dircounter, session_height
     if len(inlist) > session_height - 2 and dircounter > session_height - 4:
         outlist = ['...']
-        for i in range(session_height - 3):
-            outlist.append(inlist[(i + dircounter) % (session_height - 4)])
+        filerangestart = dircounter - (session_height - 5)
+        for i in range(filerangestart, ((session_height - 4) + filerangestart)):
+            outlist.append(inlist[i])
         outlist.append('...')
-        print(outlist)
+        #if inlist[-1] not in outlist:
+        #   outlist.append('...')
     # Abbreviate list if it's too long
     elif len(inlist) > session_height - 2:
         outlist = inlist[0:session_height - 3]
@@ -188,7 +190,7 @@ def file_window(subdirs, selected_dir, selected_subdirs):
         a = abbrev_file(c[i])
         b = abbrev_file(d[i])
         # https://stackoverflow.com/questions/29044940/how-can-you-use-a-variable-name-inside-a-python-format-specifier
-        if subdirs[i] == selected_dir:
+        if c[i] == selected_dir:
             print('\n' + '│', end='')
             colors(file_fore, file_select)
             print('{:{midwidth}}'.format(select_abbrev_file(a), midwidth=midwidth - 4), end='')
