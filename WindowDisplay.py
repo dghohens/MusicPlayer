@@ -61,6 +61,50 @@ def colors(fore = 'white', back = 'black'):
         print(Back.WHITE, '', end='')
     pass
 
+def abbrev_list(inlist):
+    # Normalizes list length, adds "..." to beginning or end of list to indicate more items.
+    global dircounter, session_height
+    if len(inlist) > session_height - 2 and dircounter > session_height - 4:
+        outlist = ['...']
+        for i in range(session_height - 3):
+            outlist.append(inlist[(i + dircounter) % (session_height - 4)])
+        outlist.append('...')
+        print(outlist)
+    # Abbreviate list if it's too long
+    elif len(inlist) > session_height - 2:
+        outlist = inlist[0:session_height - 3]
+        outlist.append('...')
+    # Lengthen list if it's too short
+    elif len(inlist) < session_height:
+        outlist = inlist
+        for i in range((session_height - 2) - len(inlist)):
+            outlist.append('')
+    else:
+        outlist = inlist
+    return outlist
+
+
+def abbrev_item(initem):
+    # Abbreviate items that are longer than the display width, add "..." at the end. Shouldn't add "..." for under 4 characters.
+    global midwidth
+    if len(initem) > midwidth:
+        outitem = initem[:midwidth - 3] + '...'
+    else:
+        outitem = initem
+    return outitem
+
+
+def select_abbrev_item(initem):
+    # Shorten selected items by 4 more than the abbrev_item function. This is because changing colors adds 2 spaces, and I can't figure out how to get rid of it.
+    # Yes, I know this is hacky. Maybe I'll fix it one day.
+    global midwidth
+    if len(initem) > midwidth - 4:
+        outitem = initem[:midwidth - 7] + '...'
+    else:
+        outitem = initem
+    return outitem
+
+
 def file_window(subdirs, selected_dir, selected_subdirs):
     global file_fore, background, midwidth, file_select
     colors(file_fore, background)
@@ -70,13 +114,13 @@ def file_window(subdirs, selected_dir, selected_subdirs):
     c = abbrev_list(subdirs)
     d = abbrev_list(selected_subdirs)
     for i in range(session_height - 2):
-        a = abbrev_file(c[i])
-        b = abbrev_file(d[i])
+        a = abbrev_item(c[i])
+        b = abbrev_item(d[i])
         # https://stackoverflow.com/questions/29044940/how-can-you-use-a-variable-name-inside-a-python-format-specifier
         if subdirs[i] == selected_dir:
             print('\n' + '│', end='')
             colors(file_fore, file_select)
-            print('{:{midwidth}}'.format(select_abbrev_file(a), midwidth=midwidth - 4), end='')
+            print('{:{midwidth}}'.format(select_abbrev_item(a), midwidth=midwidth - 4), end='')
             colors(file_fore, background)
             print('│  │' + '{:{midwidth}}'.format(b, midwidth=midwidth) + '│', end='')
         else:

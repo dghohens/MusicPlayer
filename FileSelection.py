@@ -1,56 +1,12 @@
-import os, configparser, msvcrt
+""" This module determines what files and folders will be displayed.
+"""
+
+import os, configparser, msvcrt, WindowDisplay
 
 config = configparser.ConfigParser()
 config.read('playerConfig')
 
 parent_directory = config['Directories']['Base directory']
-
-dircounter = 0
-dirlist = []
-
-
-def abbrev_list(inlist):
-    # Normalizes list length, adds "..." to beginning or end of list to indicate more files.
-    global dircounter, session_height
-    if len(inlist) > session_height - 2 and dircounter > session_height - 4:
-        outlist = ['...']
-        for i in range(session_height - 3):
-            outlist.append(inlist[(i + dircounter) % (session_height - 4)])
-        outlist.append('...')
-        print(outlist)
-    # Abbreviate list if it's too long
-    elif len(inlist) > session_height - 2:
-        outlist = inlist[0:session_height - 3]
-        outlist.append('...')
-    # Lengthen list if it's too short
-    elif len(inlist) < session_height:
-        outlist = inlist
-        for i in range((session_height - 2) - len(inlist)):
-            outlist.append('')
-    else:
-        outlist = inlist
-    return outlist
-
-
-def abbrev_file(infile):
-    # Abbreviate files/folders that are longer than the display width, add "..." at the end. Shouldn't add "..." for under 4 characters.
-    global midwidth
-    if len(infile) > midwidth:
-        outfile = infile[:midwidth - 3] + '...'
-    else:
-        outfile = infile
-    return outfile
-
-
-def select_abbrev_file(infile):
-    # Shorten selected files/folders by 4 more than the abbrev_file function. This is because changing colors adds 2 spaces, and I can't figure out how to get rid of it.
-    # Yes, I know this is hacky. Maybe I'll fix it one day.
-    global midwidth
-    if len(infile) > midwidth - 4:
-        outfile = infile[:midwidth - 7] + '...'
-    else:
-        outfile = infile
-    return outfile
 
 
 def get_dir(current_working_directory, selected_directory=None):
@@ -65,19 +21,19 @@ def get_dir(current_working_directory, selected_directory=None):
     return subdirs, selected_directory, selected_subdirs
 
 
-def dirchange(current_working_directory, selected_directory, action=''):
+def dirchange(current_working_directory, dircounter, directorylist, action=''):
     # Change directory based on an action. Maintains a directory list for going up/down levels.
-    global parent_directory, dircounter, run, dirlist
-    run = True
+    global parent_directory
     if action == 'downlevel':
-        dirlist.append(selected_directory)
-        current_working_directory = parent_directory + '\\' + '\\'.join(dirlist)
+        selected_directory = get_dir(current_working_directory)[0][dircounter]
+        directorylist.append(selected_directory)
+        current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
         selected_directory = get_dir(current_working_directory)[1]
         return current_working_directory, selected_directory
     if action == 'uplevel':
         try:
-            del(dirlist[-1])
-            current_working_directory = parent_directory + '\\' + '\\'.join(dirlist)
+            del(directorylist[-1])
+            current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
             selected_directory = get_dir(current_working_directory)[1]
             return current_working_directory, selected_directory
         except IndexError:
@@ -102,10 +58,11 @@ def dirchange(current_working_directory, selected_directory, action=''):
             selected_directory = get_dir(current_working_directory)[0][dircounter]
             return current_working_directory, selected_directory
     if action == '':
-        return current_working_directory, selected_directory
+        selected_directory = get_dir(current_working_directory)[0][dircounter]
+        return current_working_directory, selected_directory, directorylist
 
 
-directories = get_dir(parent_directory)
-file_window(directories[0], directories[1], directories[2])
-currentdir = parent_directory
-selected_dir = directories[1]
+def file_update(current_working_directory, dircount, directorylist, action = ''):
+    change = dirchange(current_working_directory, dircount, directorylist, action)
+    directories = get_dir(change[0], change[1])
+    return change, directories

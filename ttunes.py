@@ -1,19 +1,21 @@
 """ This is the starting file for the Terminal Tunes program.
 """
 
-import configparser
+import configparser, FileSelection, WindowDisplay, msvcrt
 
 config = configparser.ConfigParser()
 config.read('playerConfig')
 
+# File initialization. Program will start in file mode.
+mode = 'file'
+parent_dir = config['Directories']['Base directory']
+current_dir = parent_dir
+dircounter = 0
+dirlist = []
 
-# File interface
 
-# Song playing interface
 
-# Music player
-
-# Key press actions
+# Key press actions. This needs to be changed to pull info from the playerConfig file.
 def key_press(inkey):
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     action = ''
@@ -73,7 +75,21 @@ def key_press(inkey):
     return action
 
 
+# File interface
+def fileint(current_directory, dircount, directorylist, action = ''):
+    directories = FileSelection.file_update(current_directory, dircount, directorylist, action)
+    WindowDisplay.file_window(directories[1][0], directories[1][1], directories[1][2])
+    return directories
+
+# Song playing interface
+
+# Music player
+
+
+fileint(parent_dir, dircounter, dirlist)
+
 # Main loop
+'''
 while True:
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     key = ord(msvcrt.getch())
@@ -87,3 +103,4 @@ while True:
         file_window(directories[0], directories[1], directories[2])
     elif key == 17:
         break
+'''
