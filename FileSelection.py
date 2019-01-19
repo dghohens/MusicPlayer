@@ -59,7 +59,7 @@ def dirchange(current_working_directory, dircounter, directorylist, action=''):
             return current_working_directory, selected_directory
     if action == '':
         selected_directory = get_dir(current_working_directory)[0][dircounter]
-        return current_working_directory, selected_directory, directorylist
+        return current_working_directory, selected_directory, directorylist, dircounter
 
 
 def file_update(current_working_directory, dircount, directorylist, action = ''):

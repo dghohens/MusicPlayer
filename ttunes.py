@@ -78,7 +78,10 @@ def key_press(inkey):
 # File interface
 def fileint(current_directory, dircount, directorylist, action = ''):
     directories = FileSelection.file_update(current_directory, dircount, directorylist, action)
-    WindowDisplay.file_window(directories[1][0], directories[1][1], directories[1][2])
+    dircount = directories[0][3]
+    WindowDisplay.file_window(directories[1][0], directories[1][1], directories[1][2], dircount)
+    print(directories[1][0])
+    print(current_directory)
     return directories
 
 # Song playing interface
@@ -86,21 +89,17 @@ def fileint(current_directory, dircount, directorylist, action = ''):
 # Music player
 
 
-fileint(parent_dir, dircounter, dirlist)
+dirs = fileint(parent_dir, dircounter, dirlist)
 
 # Main loop
-'''
 while True:
+    dircounter = dirs[0][3]
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     key = ord(msvcrt.getch())
     if key == 224:
         key = ord(msvcrt.getch())
     if key in [72, 75, 77, 80]:
-        directory_change = dirchange(currentdir, selected_dir, key_press(key))
-        currentdir = directory_change[0]
-        selected_dir = directory_change[1]
-        directories = get_dir(currentdir, selected_dir)
-        file_window(directories[0], directories[1], directories[2])
+        print(dirs[1][0])
+        dirs = fileint(dirs[1][0], dircounter, dirs[1][2], action = key_press(key))
     elif key == 17:
         break
-'''

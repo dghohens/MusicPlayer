@@ -61,9 +61,10 @@ def colors(fore = 'white', back = 'black'):
         print(Back.WHITE, '', end='')
     pass
 
-def abbrev_list(inlist):
+
+def abbrev_list(inlist, dircounter):
     # Normalizes list length, adds "..." to beginning or end of list to indicate more items.
-    global dircounter, session_height
+    global session_height
     if len(inlist) > session_height - 2 and dircounter > session_height - 4:
         outlist = ['...']
         for i in range(session_height - 3):
@@ -105,14 +106,14 @@ def select_abbrev_item(initem):
     return outitem
 
 
-def file_window(subdirs, selected_dir, selected_subdirs):
+def file_window(subdirs, selected_dir, selected_subdirs, dircount):
     global file_fore, background, midwidth, file_select
     colors(file_fore, background)
     # When a key is pressed, clear screen and redraw https://stackoverflow.com/questions/2084508/clear-terminal-in-python
     os.system('cls')
     print('┌=[' + '{:^{midwidth}}'.format('Current Folder Contents', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Selected Folder Contents', midwidth = midwidth - 6) + ']──┐', end='')
-    c = abbrev_list(subdirs)
-    d = abbrev_list(selected_subdirs)
+    c = abbrev_list(subdirs, dircount)
+    d = abbrev_list(selected_subdirs, dircount)
     for i in range(session_height - 2):
         a = abbrev_item(c[i])
         b = abbrev_item(d[i])
