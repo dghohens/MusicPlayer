@@ -77,10 +77,11 @@ def key_press(inkey):
 
 # File interface
 def fileint(current_directory, dircount, directorylist, action = ''):
+    # def file_update(current_working_directory, dircount, directorylist, action = ''):
     directories = FileSelection.file_update(current_directory, dircount, directorylist, action)
+    print(directories[0])
     dircount = directories[0][3]
     WindowDisplay.file_window(directories[1][0], directories[1][1], directories[1][2], dircount)
-    print(directories[1][0])
     print(current_directory)
     return directories
 
@@ -90,6 +91,7 @@ def fileint(current_directory, dircount, directorylist, action = ''):
 
 
 dirs = fileint(parent_dir, dircounter, dirlist)
+print(dirs[0][0])
 
 # Main loop
 while True:
@@ -99,7 +101,7 @@ while True:
     if key == 224:
         key = ord(msvcrt.getch())
     if key in [72, 75, 77, 80]:
-        print(dirs[1][0])
-        dirs = fileint(dirs[1][0], dircounter, dirs[1][2], action = key_press(key))
+        print(dirs[0][0])
+        dirs = fileint(dirs[0][0], dircounter, dirs[1][2], action = key_press(key))
     elif key == 17:
         break

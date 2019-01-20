@@ -29,34 +29,34 @@ def dirchange(current_working_directory, dircounter, directorylist, action=''):
         directorylist.append(selected_directory)
         current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
         selected_directory = get_dir(current_working_directory)[1]
-        return current_working_directory, selected_directory
+        return current_working_directory, selected_directory, directorylist, dircounter
     if action == 'uplevel':
         try:
             del(directorylist[-1])
             current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
             selected_directory = get_dir(current_working_directory)[1]
-            return current_working_directory, selected_directory
+            return current_working_directory, selected_directory, directorylist, dircounter
         except IndexError:
             print('You are at the root music directory!')
-            return current_working_directory, selected_directory
+            return current_working_directory, selected_directory, directorylist, dircounter
     if action == 'nextdir':
         try:
             dircounter += 1
             selected_directory = get_dir(current_working_directory)[0][dircounter]
-            return current_working_directory, selected_directory
+            return current_working_directory, selected_directory, directorylist, dircounter
         except IndexError:
             dircounter = 0
             selected_directory = get_dir(current_working_directory)[0][dircounter]
-            return current_working_directory, selected_directory
+            return current_working_directory, selected_directory, directorylist, dircounter
     if action == 'prevdir':
         try:
             dircounter -= 1
             selected_directory = get_dir(current_working_directory)[0][dircounter]
-            return current_working_directory, selected_directory
+            return current_working_directory, selected_directory, directorylist, dircounter
         except IndexError:
             dircounter = -1
             selected_directory = get_dir(current_working_directory)[0][dircounter]
-            return current_working_directory, selected_directory
+            return current_working_directory, selected_directory, directorylist, dircounter
     if action == '':
         selected_directory = get_dir(current_working_directory)[0][dircounter]
         return current_working_directory, selected_directory, directorylist, dircounter
