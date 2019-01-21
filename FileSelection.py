@@ -1,7 +1,7 @@
 """ This module determines what files and folders will be displayed.
 """
 
-import os, configparser, msvcrt, WindowDisplay
+import os, configparser
 
 config = configparser.ConfigParser()
 config.read('playerConfig')
@@ -37,6 +37,7 @@ def dirchange(current_working_directory, dircounter, directorylist, action=''):
             selected_directory = get_dir(current_working_directory)[1]
             return current_working_directory, selected_directory, directorylist, dircounter
         except IndexError:
+            print(current_working_directory)
             print('You are at the root music directory!')
             return current_working_directory, selected_directory, directorylist, dircounter
     if action == 'nextdir':
@@ -64,5 +65,12 @@ def dirchange(current_working_directory, dircounter, directorylist, action=''):
 
 def file_update(current_working_directory, dircount, directorylist, action = ''):
     change = dirchange(current_working_directory, dircount, directorylist, action)
+    current_dir = change[0]
+    select_dir = change[1]
+    dirlist = change[2]
+    dircount = change[3]
     directories = get_dir(change[0], change[1])
-    return change, directories
+    subdirectories = directories[0]
+    selected_dir = directories[1]
+    selected_subdirectories = directories[2]
+    return current_dir, select_dir, dirlist, dircount, subdirectories, selected_dir, selected_subdirectories

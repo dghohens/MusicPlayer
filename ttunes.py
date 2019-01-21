@@ -1,7 +1,7 @@
 """ This is the starting file for the Terminal Tunes program.
 """
 
-import configparser, FileSelection, WindowDisplay, msvcrt
+import msvcrt, configparser, FileSelection, WindowDisplay, Player
 
 config = configparser.ConfigParser()
 config.read('playerConfig')
@@ -78,10 +78,11 @@ def key_press(inkey):
 # File interface
 def fileint(current_directory, dircount, directorylist, action = ''):
     # def file_update(current_working_directory, dircount, directorylist, action = ''):
+    # return current_dir, select_dir, dirlist, dircount, subdirectories, selected_dir, selected_subdirectories
     directories = FileSelection.file_update(current_directory, dircount, directorylist, action)
-    print(directories[0])
-    dircount = directories[0][3]
-    WindowDisplay.file_window(directories[1][0], directories[1][1], directories[1][2], dircount)
+    dircount = directories[3]
+    # def file_window(subdirs, selected_dir, selected_subdirs, dircount):
+    WindowDisplay.file_window(directories[4], directories[1], directories[6], dircount)
     print(current_directory)
     return directories
 
@@ -91,17 +92,21 @@ def fileint(current_directory, dircount, directorylist, action = ''):
 
 
 dirs = fileint(parent_dir, dircounter, dirlist)
-print(dirs[0][0])
 
 # Main loop
 while True:
-    dircounter = dirs[0][3]
+    dircounter = dirs[3]
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     key = ord(msvcrt.getch())
     if key == 224:
         key = ord(msvcrt.getch())
-    if key in [72, 75, 77, 80]:
-        print(dirs[0][0])
-        dirs = fileint(dirs[0][0], dircounter, dirs[1][2], action = key_press(key))
+    if key == 75 and (dirs[0] == parent_dir or dirs[0] == parent_dir + '\\'):
+        print('You are at the root music directory!')
+        pass
+    elif key in [72, 75, 77, 80]:
+        dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
+        pass
+    elif key == 13:
+        Player.playsong(dirs[1])
     elif key == 17:
         break
