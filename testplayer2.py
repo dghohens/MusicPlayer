@@ -1,12 +1,13 @@
 """Python 3 CLI audio player
 """
 
-file = 'K:\\Music\\Buellton - Silent Partner\\Buellton - Silent Partner - 01 Painting the Cave.mp3'
+file = 'C:\\Users\\dhohenst\\Music\\Against Me! (5 Albums, 4 EPs, 1 Demo Tape)\\[1998] Vivida Vis!\\01 Intro.mp3'
 
 from ctypes import c_buffer, windll
 from random import random
 from time   import sleep
 from sys    import getfilesystemencoding
+
 
 def winCommand(*command):
     buf = c_buffer(255)
@@ -20,11 +21,14 @@ def winCommand(*command):
                             '\n    ' + errorBuffer.value.decode())
         print('this exception is important!')
         raise PlaysoundException(exceptionMessage)
+    print(buf.value)
     return buf.value
 
 alias = 'playsound_' + str(random())
 winCommand('open "' + file + '" alias', alias)
+print('open "' + file + '" alias', alias)
 winCommand('set', alias, 'time format milliseconds')
+print('set', alias, 'time format milliseconds')
 durationInMS = winCommand('status', alias, 'length')
 print('Playing ', file)
 print(durationInMS)
