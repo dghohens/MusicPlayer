@@ -107,6 +107,7 @@ while True:
         dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
         pass
     elif key == 13:
-        Player.playsong(dirs[1])
+        print(dirs[0])
+        Player.playsong((dirs[0] + '\\' + dirs[1]))
     elif key == 17:
         break

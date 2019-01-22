@@ -1,7 +1,7 @@
 """Python 3 CLI audio player
 """
 
-file = '<filename>'
+file = 'K:\\Music\\Buellton - Silent Partner\\Buellton - Silent Partner - 01 Painting the Cave.mp3'
 
 from ctypes import c_buffer, windll
 from random import random
@@ -18,6 +18,7 @@ def winCommand(*command):
         exceptionMessage = ('\n    Error ' + str(errorCode) + ' for command:'
                             '\n        ' + command.decode() +
                             '\n    ' + errorBuffer.value.decode())
+        print('this exception is important!')
         raise PlaysoundException(exceptionMessage)
     return buf.value
 
@@ -25,6 +26,8 @@ alias = 'playsound_' + str(random())
 winCommand('open "' + file + '" alias', alias)
 winCommand('set', alias, 'time format milliseconds')
 durationInMS = winCommand('status', alias, 'length')
+print('Playing ', file)
+print(durationInMS)
 totaldur = int(durationInMS)//1000
 winCommand('play', alias, 'from 0 to', durationInMS.decode())
 

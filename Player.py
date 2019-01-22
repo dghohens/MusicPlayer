@@ -5,7 +5,7 @@ Most of this was taken from or inspired by the playsound library.
 
 from ctypes import c_buffer, windll
 from random import random
-from time   import sleep
+# from time   import sleep
 from sys    import getfilesystemencoding
 
 
@@ -13,7 +13,8 @@ def playsong(song):
     def winCommand(*command):
         buf = c_buffer(255)
         command = ' '.join(command).encode(getfilesystemencoding())
-        errorCode = int(windll.winmm.mciSendStringA(command, buf, 254, 0))
+        # errorCode = int(windll.winmm.mciSendStringA(command, buf, 254, 0))
+        ''' This was in the previous code. I don't understand why you'd want to raise this particular exception.
         if errorCode:
             errorBuffer = c_buffer(255)
             windll.winmm.mciGetErrorStringA(errorCode, errorBuffer, 254)
@@ -21,13 +22,18 @@ def playsong(song):
                                 '\n        ' + command.decode() +
                                 '\n    ' + errorBuffer.value.decode())
             raise PlaysoundException(exceptionMessage)
+        '''
         return buf.value
 
     alias = 'playsound_' + str(random())
     winCommand('open "' + song + '" alias', alias)
+    print('open "' + song + '" alias', alias)
     winCommand('set', alias, 'time format milliseconds')
+    print('set', alias, 'time format milliseconds')
     durationInMS = winCommand('status', alias, 'length')
-    totaldur = int(durationInMS)//1000
+    print('Playing ', song)
+    print(durationInMS)
+    # totaldur = int(durationInMS)//1000
     winCommand('play', alias, 'from 0 to', durationInMS.decode())
 
 ''' This part displays the time remaining on songs. Not in use for now.
