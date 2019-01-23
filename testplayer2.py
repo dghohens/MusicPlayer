@@ -1,7 +1,7 @@
 """Python 3 CLI audio player
 """
 
-file = 'C:\\Users\\dhohenst\\Music\\Against Me! (5 Albums, 4 EPs, 1 Demo Tape)\\[1998] Vivida Vis!\\01 Intro.mp3'
+file = 'K:\\Music\\Buellton - Silent Partner\\Buellton - Silent Partner - 01 Painting the Cave.mp3'
 
 from ctypes import c_buffer, windll
 from random import random

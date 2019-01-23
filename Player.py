@@ -33,6 +33,7 @@ def playsong(song):
     durationInMS = winCommand('status', alias, 'length')
     # totaldur = int(durationInMS)//1000
     winCommand('play', alias, 'from 0 to', durationInMS.decode())
+    return alias
 
 ''' This part displays the time remaining on songs. Not in use for now.
 for i in range(1, totaldur):

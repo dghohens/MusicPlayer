@@ -1,7 +1,7 @@
 """ This is the starting file for the Terminal Tunes program.
 """
 
-import msvcrt, configparser, FileSelection, WindowDisplay, Player
+import msvcrt, configparser, FileSelection, WindowDisplay, Player2
 
 config = configparser.ConfigParser()
 config.read('playerConfig')
@@ -83,7 +83,6 @@ def fileint(current_directory, dircount, directorylist, action = ''):
     dircount = directories[3]
     # def file_window(subdirs, selected_dir, selected_subdirs, dircount):
     WindowDisplay.file_window(directories[4], directories[1], directories[6], dircount)
-    print(current_directory)
     return directories
 
 # Song playing interface
@@ -107,7 +106,6 @@ while True:
         dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
         pass
     elif key == 13:
-        print(dirs[0])
-        Player.playsong((dirs[0] + '\\' + dirs[1]))
+        Player2.playsong((dirs[0] + '\\' + dirs[1]))
     elif key == 17:
         break
