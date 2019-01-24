@@ -87,8 +87,8 @@ def fileint(current_directory, dircount, directorylist, action = ''):
 
 # Song playing interface
 
-# Music player
-
+# Initialize music player and get all the startup errors out
+Player2.playsong('', '')
 
 dirs = fileint(parent_dir, dircounter, dirlist)
 
@@ -105,7 +105,7 @@ while True:
     elif key in [72, 75, 77, 80]:
         dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
         pass
-    elif key == 13:
-        Player2.playsong((dirs[0] + '\\' + dirs[1]))
+    elif key in [13, 115, 32]:
+        Player2.playsong((dirs[0] + '\\' + dirs[1]), action = key_press(key))
     elif key == 17:
         break
