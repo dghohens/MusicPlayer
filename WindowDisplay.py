@@ -70,7 +70,6 @@ def abbrev_list(inlist, dircounter):
         for i in range(session_height - 3):
             outlist.append(inlist[(i + dircounter) % (session_height - 4)])
         outlist.append('...')
-        print(outlist)
     # Abbreviate list if it's too long
     elif len(inlist) > session_height - 2:
         outlist = inlist[0:session_height - 3]

@@ -1,7 +1,7 @@
 """ This is the starting file for the Terminal Tunes program.
 """
 
-import msvcrt, configparser, FileSelection, WindowDisplay, Player2
+import msvcrt, configparser, FileSelection, WindowDisplay, Player2, vlc
 
 config = configparser.ConfigParser()
 config.read('playerConfig')
@@ -12,7 +12,7 @@ parent_dir = config['Directories']['Base directory']
 current_dir = parent_dir
 dircounter = 0
 dirlist = []
-
+playerinst = None
 
 
 # Key press actions. This needs to be changed to pull info from the playerConfig file.
@@ -106,6 +106,6 @@ while True:
         dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
         pass
     elif key in [13, 115, 32]:
-        Player2.playsong((dirs[0] + '\\' + dirs[1]), action = key_press(key))
+        playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
     elif key == 17:
         break

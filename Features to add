@@ -1,0 +1,16 @@
+100% necessary:
+- Switch to music player when playing:
+    - Time left in song
+    - Current status
+- Normal music player features:
+    - Play/pause
+    - Stop
+    - Skip forward/back
+- Playlist support
+- Play entire folder if selected
+
+Nice to have:
+- Repeat
+- Shuffle
+- Key binding info
+- Help page
