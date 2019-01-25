@@ -19,5 +19,5 @@ def playsong(song, action, playerinstance = None):
         print(player)
     elif action == 'stop':
         player.stop()
-        print(player)
+        player = None
     return player

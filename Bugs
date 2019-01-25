@@ -1,6 +1,8 @@
 - Can't select files more than 2 levels deep (intermittently)
 - VLC DLL errors when starting
 - Songs can play over top of each other
+    - Now fixed, can't stop first song and play second song now
+        - Works now, have to stop, then start next song
 - Selection drops halfway down the list on 1st push of down button
 - File scroll doesn't show selected file properly
 - File scroll doesn't move with up arrow

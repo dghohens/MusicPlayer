@@ -4,7 +4,9 @@
     - Current status
 - Normal music player features:
     - Play/pause
+        - Works, but can't play second song now
     - Stop
+        - Works, but can't play second song now
     - Skip forward/back
 - Playlist support
 - Play entire folder if selected
