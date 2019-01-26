@@ -29,16 +29,19 @@ def dirchange(current_working_directory, dircounter, directorylist, action=''):
         directorylist.append(selected_directory)
         current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
         selected_directory = get_dir(current_working_directory)[1]
+        dircounter = 0
         return current_working_directory, selected_directory, directorylist, dircounter
     if action == 'uplevel':
         try:
             del(directorylist[-1])
             current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
             selected_directory = get_dir(current_working_directory)[1]
+            dircounter = 0
             return current_working_directory, selected_directory, directorylist, dircounter
         except IndexError:
             print(current_working_directory)
             print('You are at the root music directory!')
+            selected_directory = get_dir(current_working_directory)[1]
             return current_working_directory, selected_directory, directorylist, dircounter
     if action == 'nextdir':
         try:

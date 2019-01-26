@@ -1,6 +1,27 @@
 - Can't select files more than 2 levels deep (intermittently)
+    - Seems to only be a problem if you try to go down a level without selecting the next directory
+    - Disclosure > Albums breaks it
+            Traceback (most recent call last):
+          File "ttunes.py", line 106, in <module>
+            dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
+          File "ttunes.py", line 82, in fileint
+            directories = FileSelection.file_update(current_directory, dircount, directorylist, action)
+          File "C:\Users\dhohenst\PycharmProjects\MusicPlayer\FileSelection.py", line 67, in file_update
+            change = dirchange(current_working_directory, dircount, directorylist, action)
+          File "C:\Users\dhohenst\PycharmProjects\MusicPlayer\FileSelection.py", line 28, in dirchange
+            selected_directory = get_dir(current_working_directory)[0][dircounter]
+        IndexError: list index out of range
+    - Fixed!
+
 - VLC DLL errors when starting
+    - Created player2test to display errors without clearing screen
+
 - Songs can play over top of each other
+    - Fixed!
+
 - Selection drops halfway down the list on 1st push of down button
+    - probably related to first bug lolol
+    - Fixed!
+
 - File scroll doesn't show selected file properly
 - File scroll doesn't move with up arrow
