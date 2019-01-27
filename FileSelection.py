@@ -25,12 +25,20 @@ def dirchange(current_working_directory, dircounter, directorylist, action=''):
     # Change directory based on an action. Maintains a directory list for going up/down levels.
     global parent_directory
     if action == 'downlevel':
-        selected_directory = get_dir(current_working_directory)[0][dircounter]
-        directorylist.append(selected_directory)
-        current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
-        selected_directory = get_dir(current_working_directory)[1]
-        dircounter = 0
-        return current_working_directory, selected_directory, directorylist, dircounter
+        try:
+            selected_directory = get_dir(current_working_directory)[0][dircounter]
+            directorylist.append(selected_directory)
+            current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
+            selected_directory = get_dir(current_working_directory)[1]
+            dircounter = 0
+            return current_working_directory, selected_directory, directorylist, dircounter
+        except NotADirectoryError:
+            print('That is not a directory!')
+            del (directorylist[-1])
+            current_working_directory = parent_directory + '\\' + '\\'.join(directorylist)
+            selected_directory = get_dir(current_working_directory)[1]
+            dircounter = 0
+            return current_working_directory, selected_directory, directorylist, dircounter
     if action == 'uplevel':
         try:
             del(directorylist[-1])

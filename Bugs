@@ -23,5 +23,22 @@
     - probably related to first bug lolol
     - Fixed!
 
+- Stop and select another song to play, the first song plays.
+    - Fixed!
+
+- Have to stop first song before playing second song
+    - Fixed!
+
+- Sounds like someone put rice krispies in the speaker while playback is happening
+    - May be specific to my laptop
+
+- Trying to go down a level on a non-directory causes a crash
+    - Fixed!
+
+- Trying to play a non-song file causes errors
+    - Should add the entire directory to playlist if music exists
+
 - File scroll doesn't show selected file properly
+    - Partly fixed, caused another break where rollover doesn't work
+
 - File scroll doesn't move with up arrow

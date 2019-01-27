@@ -65,10 +65,14 @@ def colors(fore = 'white', back = 'black'):
 def abbrev_list(inlist, dircounter):
     # Normalizes list length, adds "..." to beginning or end of list to indicate more items.
     global session_height
+    # If the length of the list is more than the height of the display, and the selection is past the normal last element,
+    # add ... to the beginning, display all the entries including the selection and add ... to the end.
     if len(inlist) > session_height - 2 and dircounter > session_height - 4:
         outlist = ['...']
-        for i in range(session_height - 3):
-            outlist.append(inlist[(i + dircounter) % (session_height - 4)])
+        print((dircounter - session_height + 4), dircounter + 3)
+        print(inlist[dircounter])
+        for i in range((dircounter - session_height + 4), dircounter + 3):
+            outlist.append(inlist[i])
         outlist.append('...')
     # Abbreviate list if it's too long
     elif len(inlist) > session_height - 2:

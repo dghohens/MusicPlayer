@@ -12,12 +12,14 @@ def playsong(song, action, playerinstance = None):
         print(playerinstance.audio_get_track_description())
         player = playerinstance
     if action == 'play':
+        player.stop()
+        player = vlc.MediaPlayer(song)
         player.play()
-        print(player)
+        #print(player)
     elif action == 'pauseplay':
         player.pause()
-        print(player)
+        #print(player)
     elif action == 'stop':
         player.stop()
-        print(player)
+        #print(player)
     return player

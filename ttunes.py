@@ -108,7 +108,7 @@ while True:
         print('You are at the root music directory!')
         pass
     elif key in [72, 75, 77, 80]:
-        dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
+        dirs = fileint(dirs[0], dirs[3], dirs[2], key_press(key))
         print(dircounter)
         print(dirs[1])
         pass
