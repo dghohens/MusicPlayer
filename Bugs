@@ -1,8 +1,44 @@
 - Can't select files more than 2 levels deep (intermittently)
+    - Seems to only be a problem if you try to go down a level without selecting the next directory
+    - Disclosure > Albums breaks it
+            Traceback (most recent call last):
+          File "ttunes.py", line 106, in <module>
+            dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
+          File "ttunes.py", line 82, in fileint
+            directories = FileSelection.file_update(current_directory, dircount, directorylist, action)
+          File "C:\Users\dhohenst\PycharmProjects\MusicPlayer\FileSelection.py", line 67, in file_update
+            change = dirchange(current_working_directory, dircount, directorylist, action)
+          File "C:\Users\dhohenst\PycharmProjects\MusicPlayer\FileSelection.py", line 28, in dirchange
+            selected_directory = get_dir(current_working_directory)[0][dircounter]
+        IndexError: list index out of range
+    - Fixed!
+
 - VLC DLL errors when starting
+    - Created player2test to display errors without clearing screen
+
 - Songs can play over top of each other
-    - Now fixed, can't stop first song and play second song now
-        - Works now, have to stop, then start next song
+    - Fixed!
+
 - Selection drops halfway down the list on 1st push of down button
+    - probably related to first bug lolol
+    - Fixed!
+
+- Stop and select another song to play, the first song plays.
+    - Fixed!
+
+- Have to stop first song before playing second song
+    - Fixed!
+
+- Sounds like someone put rice krispies in the speaker while playback is happening
+    - May be specific to my laptop
+
+- Trying to go down a level on a non-directory causes a crash
+    - Fixed!
+
+- Trying to play a non-song file causes errors
+    - Should add the entire directory to playlist if music exists
+
 - File scroll doesn't show selected file properly
+    - Partly fixed, still trying to track down a selected directory vs. directory counter mismatch. Might need to rework how selected directories chosen.
+
 - File scroll doesn't move with up arrow

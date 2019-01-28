@@ -65,10 +65,13 @@ def colors(fore = 'white', back = 'black'):
 def abbrev_list(inlist, dircounter):
     # Normalizes list length, adds "..." to beginning or end of list to indicate more items.
     global session_height
+    # If the length of the list is more than the height of the display, and the selection is past the normal last element,
+    # add ... to the beginning, display all the entries including the selection and add ... to the end.
     if len(inlist) > session_height - 2 and dircounter > session_height - 4:
         outlist = ['...']
-        for i in range(session_height - 3):
-            outlist.append(inlist[(i + dircounter) % (session_height - 4)])
+        # I literally just figured this out by adding and subtracting numbers to the range in a pseudorandom way. Mess with this at your own peril.
+        for i in range((dircounter - session_height + 5), dircounter + 1):
+            outlist.append(inlist[i])
         outlist.append('...')
     # Abbreviate list if it's too long
     elif len(inlist) > session_height - 2:
@@ -117,6 +120,7 @@ def file_window(subdirs, selected_dir, selected_subdirs, dircount):
         a = abbrev_item(c[i])
         b = abbrev_item(d[i])
         # https://stackoverflow.com/questions/29044940/how-can-you-use-a-variable-name-inside-a-python-format-specifier
+        print(subdirs[i], selected_dir, end='')
         if subdirs[i] == selected_dir:
             print('\n' + '│', end='')
             colors(file_fore, file_select)

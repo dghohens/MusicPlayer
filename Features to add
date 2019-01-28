@@ -16,3 +16,4 @@ Nice to have:
 - Shuffle
 - Key binding info
 - Help page
+- Scroll selected file if name is too long, like ipod does (wait 2 seconds, then start to scroll)

@@ -92,7 +92,12 @@ Player2.playsong('', '')
 
 dirs = fileint(parent_dir, dircounter, dirlist)
 
+print(dircounter)
+print(dirs[1])
+
 # Main loop
+
+
 while True:
     dircounter = dirs[3]
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
@@ -103,7 +108,9 @@ while True:
         print('You are at the root music directory!')
         pass
     elif key in [72, 75, 77, 80]:
-        dirs = fileint(dirs[0], dirs[3], dirs[2], action = key_press(key))
+        dirs = fileint(dirs[0], dirs[3], dirs[2], key_press(key))
+        print(dircounter)
+        print(dirs[1])
         pass
     elif key in [13, 115, 32]:
         playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
