@@ -39,6 +39,6 @@
     - Should add the entire directory to playlist if music exists
 
 - File scroll doesn't show selected file properly
-    - Partly fixed, caused another break where rollover doesn't work
+    - Partly fixed, still trying to track down a selected directory vs. directory counter mismatch. Might need to rework how selected directories chosen.
 
 - File scroll doesn't move with up arrow
