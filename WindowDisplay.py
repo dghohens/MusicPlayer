@@ -72,7 +72,16 @@ def abbrev_list(inlist, dircounter):
         # I literally just figured this out by adding and subtracting numbers to the range in a pseudorandom way. Mess with this at your own peril.
         for i in range((dircounter - session_height + 5), dircounter + 1):
             outlist.append(inlist[i])
-        outlist.append('...')
+        if dircounter != -1 and dircounter != len(inlist)-1:
+            outlist.append('...')
+    # This is to get reverse scroll to work correctly
+    elif len(inlist) > session_height - 2 and dircounter < 0 and abs(dircounter) < session_height - abs(dircounter):
+        outlist = ['...']
+        # I literally just figured this out by adding and subtracting numbers to the range in a pseudorandom way. Mess with this at your own peril.
+        for i in range((dircounter - session_height + 5), dircounter + 1):
+            outlist.append(inlist[i])
+        if dircounter != -1 and dircounter != len(inlist)-1:
+            outlist.append('...')
     # Abbreviate list if it's too long
     elif len(inlist) > session_height - 2:
         outlist = inlist[0:session_height - 3]
@@ -120,8 +129,7 @@ def file_window(subdirs, selected_dir, selected_subdirs, dircount):
         a = abbrev_item(c[i])
         b = abbrev_item(d[i])
         # https://stackoverflow.com/questions/29044940/how-can-you-use-a-variable-name-inside-a-python-format-specifier
-        print(subdirs[i], selected_dir, end='')
-        if subdirs[i] == selected_dir:
+        if c[i] == selected_dir:
             print('\n' + '│', end='')
             colors(file_fore, file_select)
             print('{:{midwidth}}'.format(select_abbrev_item(a), midwidth=midwidth - 4), end='')
@@ -129,9 +137,6 @@ def file_window(subdirs, selected_dir, selected_subdirs, dircount):
             print('│  │' + '{:{midwidth}}'.format(b, midwidth=midwidth) + '│', end='')
         else:
             print('\n' +'│' + '{:{midwidth}}'.format(a, midwidth = midwidth) + '│  │' + '{:{midwidth}}'.format(b, midwidth = midwidth) + '│', end='')
-        # print('\n' +'│' + '{:{}}'.format(a, midwidth) + '│ │' + '{:{}}'.format(b, midwidth) + '│', end = '')
-    #print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
-    #print('\033[F' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
     print('\n' + '└' + '─' * midwidth + '┘  └' + '─' * midwidth + '┘')
     pass
 

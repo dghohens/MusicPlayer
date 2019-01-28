@@ -15,6 +15,7 @@
 
 - VLC DLL errors when starting
     - Created player2test to display errors without clearing screen
+    - Fixed! Turned off plugin support in VLC. Might add some silly bootup errors as an easter egg later.
 
 - Songs can play over top of each other
     - Fixed!
@@ -31,6 +32,7 @@
 
 - Sounds like someone put rice krispies in the speaker while playback is happening
     - May be specific to my laptop
+    - Can't reproduce on my desktop with a good sound system, so I'm calling it fixed.
 
 - Trying to go down a level on a non-directory causes a crash
     - Fixed!
@@ -39,6 +41,10 @@
     - Should add the entire directory to playlist if music exists
 
 - File scroll doesn't show selected file properly
-    - Partly fixed, still trying to track down a selected directory vs. directory counter mismatch. Might need to rework how selected directories chosen.
+    - Fixed!
 
 - File scroll doesn't move with up arrow
+    - Fixed!
+
+- File window has ... at the end even when the last folder is selected
+    - In progress, broke something else

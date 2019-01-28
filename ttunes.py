@@ -82,7 +82,7 @@ def fileint(current_directory, dircount, directorylist, action = ''):
     directories = FileSelection.file_update(current_directory, dircount, directorylist, action)
     dircount = directories[3]
     # def file_window(subdirs, selected_dir, selected_subdirs, dircount):
-    WindowDisplay.file_window(directories[4], directories[1], directories[6], dircount)
+    WindowDisplay.file_window(directories[4], directories[4][dircount], directories[6], dircount)
     return directories
 
 # Song playing interface
@@ -93,7 +93,8 @@ Player2.playsong('', '')
 dirs = fileint(parent_dir, dircounter, dirlist)
 
 print(dircounter)
-print(dirs[1])
+print(dirs[3])
+print(dirs[4][dircounter])
 
 # Main loop
 
@@ -109,8 +110,12 @@ while True:
         pass
     elif key in [72, 75, 77, 80]:
         dirs = fileint(dirs[0], dirs[3], dirs[2], key_press(key))
+        dircounter = dirs[3]
         print(dircounter)
-        print(dirs[1])
+        print(dirs[3])
+        print(dirs[4][dircounter])
+        # selected_directory = get_dir(current_working_directory)[0][dircounter]
+        #     return subdirs, selected_directory, selected_subdirs
         pass
     elif key in [13, 115, 32]:
         playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
