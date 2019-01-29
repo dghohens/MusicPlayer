@@ -69,19 +69,24 @@ def abbrev_list(inlist, dircounter):
     # add ... to the beginning, display all the entries including the selection and add ... to the end.
     if len(inlist) > session_height - 2 and dircounter > session_height - 4:
         outlist = ['...']
-        # I literally just figured this out by adding and subtracting numbers to the range in a pseudorandom way. Mess with this at your own peril.
-        for i in range((dircounter - session_height + 5), dircounter + 1):
-            outlist.append(inlist[i])
-        if dircounter != -1 and dircounter != len(inlist)-1:
+        if dircounter != -1 and dircounter != len(inlist) - 1:
+            # I literally just figured this out by adding and subtracting numbers to the range in a pseudorandom way. Mess with this at your own peril.
+            for i in range((dircounter - session_height + 5), dircounter + 1):
+                outlist.append(inlist[i])
             outlist.append('...')
+        else:
+            for i in range((dircounter - session_height + 4), dircounter + 1):
+                outlist.append(inlist[i])
     # This is to get reverse scroll to work correctly
     elif len(inlist) > session_height - 2 and dircounter < 0 and abs(dircounter) < session_height - abs(dircounter):
         outlist = ['...']
-        # I literally just figured this out by adding and subtracting numbers to the range in a pseudorandom way. Mess with this at your own peril.
-        for i in range((dircounter - session_height + 5), dircounter + 1):
-            outlist.append(inlist[i])
-        if dircounter != -1 and dircounter != len(inlist)-1:
+        if dircounter != -1 and dircounter != len(inlist) - 1:
+            for i in range((dircounter - session_height + 5), dircounter + 1):
+                outlist.append(inlist[i])
             outlist.append('...')
+        else:
+            for i in range((dircounter - session_height + 4), dircounter + 1):
+                outlist.append(inlist[i])
     # Abbreviate list if it's too long
     elif len(inlist) > session_height - 2:
         outlist = inlist[0:session_height - 3]
@@ -145,6 +150,19 @@ def file_window(subdirs, selected_dir, selected_subdirs, dircount):
 def player_window():
     print(Fore.YELLOW, '')
     print(Back.background, '')
-    print('┌=[' + '    Artist name - Album name    ' + ']=┐ ┌───[' + '   Artist name - Song name   ' + ']───┐', end = '')
+    os.system('cls')
+    c = abbrev_list(subdirs, dircount)
+    d = abbrev_list(selected_subdirs, dircount)
+    e = abbrev_list(playlist)
+    print('┌=[' + '{:^{midwidth}}'.format('Current Folder', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Current Song', midwidth = midwidth - 6) + ']──┐', end='')
+    print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[0]), midwidth=midwidth) + '│  │' + '{:{midwidth}}'.format('Time:    ', curtime, ':', totaltime, midwidth=midwidth) + '│', end='')
+    print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[1]), midwidth=midwidth) + '│  └' + '─' * midwidth + '┘')
+    print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[2]), midwidth=midwidth) + '│  ┌──[' + '{:^{midwidth}}'.format('Current Selection', midwidth = midwidth - 6) + ']──┐', end='')
+    for i in range(3, session_height - 10):
+        print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[i]), midwidth=midwidth) + '│  |' + '{:^{midwidth}}'.format(abbrev_item(d[i-3]), midwidth=midwidth) + '|', end='')
+
+    print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
+    # 2nd column should also include selection info and playlist
+    # print('┌=[' + '    Artist name - Album name    ' + ']=┐ ┌───[' + '   Artist name - Song name   ' + ']───┐', end = '')
     print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
     print('\033[F' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
