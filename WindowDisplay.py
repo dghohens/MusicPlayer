@@ -16,6 +16,8 @@ midwidth = (session_width - 6)//2
 background = config['Interface colors']['Background']
 file_fore = config['Interface colors']['File foreground']
 file_select = config['Interface colors']['File selection']
+player_fore = config['Interface colors']['Music foreground']
+player_select = config['Interface colors']['Music selection']
 
 os.system('cls')
 
@@ -24,6 +26,7 @@ os.system('cls')
 def colors(fore = 'white', back = 'black'):
     fore = fore.lower()
     back = back.lower()
+    print(fore, back)
     # BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE
     # Fores
     if fore == 'black':
@@ -147,18 +150,20 @@ def file_window(subdirs, selected_dir, selected_subdirs, dircount):
 
 
 # Still gotta build this one out
-def player_window():
-    print(Fore.YELLOW, '')
-    print(Back.background, '')
-    os.system('cls')
+def player_window(subdirs, dircount, playlist):
+    global player_fore, background, midwidth, player_select
+    colors(player_fore, background)
+    # os.system('cls')
     c = abbrev_list(subdirs, dircount)
-    d = abbrev_list(selected_subdirs, dircount)
-    e = abbrev_list(playlist)
+    d = abbrev_list(playlist, dircount)
+    e = abbrev_list(playlist, 0)
+    curtime = 0
+    totaltime = 0
     print('┌=[' + '{:^{midwidth}}'.format('Current Folder', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Current Song', midwidth = midwidth - 6) + ']──┐', end='')
     print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[0]), midwidth=midwidth) + '│  │' + '{:{midwidth}}'.format('Time:    ', curtime, ':', totaltime, midwidth=midwidth) + '│', end='')
     print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[1]), midwidth=midwidth) + '│  └' + '─' * midwidth + '┘')
     print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[2]), midwidth=midwidth) + '│  ┌──[' + '{:^{midwidth}}'.format('Current Selection', midwidth = midwidth - 6) + ']──┐', end='')
-    for i in range(3, session_height - 10):
+    for i in range(3,7):
         print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[i]), midwidth=midwidth) + '│  |' + '{:^{midwidth}}'.format(abbrev_item(d[i-3]), midwidth=midwidth) + '|', end='')
 
     print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
