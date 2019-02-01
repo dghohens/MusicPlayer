@@ -153,7 +153,7 @@ def file_window(subdirs, selected_dir, selected_subdirs, dircount):
 def player_window(subdirs, dircount, playlist):
     global player_fore, background, midwidth, player_select
     colors(player_fore, background)
-    # os.system('cls')
+    os.system('cls')
     c = abbrev_list(subdirs, dircount)
     d = abbrev_list(playlist, dircount)
     e = abbrev_list(playlist, 0)
@@ -161,13 +161,14 @@ def player_window(subdirs, dircount, playlist):
     totaltime = 0
     print('┌=[' + '{:^{midwidth}}'.format('Current Folder', midwidth = midwidth - 4) + ']=┐  ┌──[' + '{:^{midwidth}}'.format('Current Song', midwidth = midwidth - 6) + ']──┐', end='')
     print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[0]), midwidth=midwidth) + '│  │' + '{:{midwidth}}'.format('Time:    ', curtime, ':', totaltime, midwidth=midwidth) + '│', end='')
-    print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[1]), midwidth=midwidth) + '│  └' + '─' * midwidth + '┘')
+    print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[1]), midwidth=midwidth) + '│  └' + '─' * midwidth + '┘', end = '')
     print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[2]), midwidth=midwidth) + '│  ┌──[' + '{:^{midwidth}}'.format('Current Selection', midwidth = midwidth - 6) + ']──┐', end='')
     for i in range(3,7):
         print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[i]), midwidth=midwidth) + '│  |' + '{:^{midwidth}}'.format(abbrev_item(d[i-3]), midwidth=midwidth) + '|', end='')
-
-    print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
+    print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[8]), midwidth=midwidth) + '│  └' + '─' * midwidth + '┘', end = '')
+    print('\n' + '│' + '{:{midwidth}}'.format(abbrev_item(c[1]), midwidth=midwidth) + '│  ┌──[' + '{:^{midwidth}}'.format('Playlist', midwidth = midwidth - 6) + ']──┐', end='')
+    print(('\n' + '│' + ' ' * midwidth + '│  │' + ' ' * midwidth + '│') * 11, end = '')
     # 2nd column should also include selection info and playlist
     # print('┌=[' + '    Artist name - Album name    ' + ']=┐ ┌───[' + '   Artist name - Song name   ' + ']───┐', end = '')
-    print(('\n' + '│' + ' ' * 36 + '│ │' + ' ' * 37 + '│') * 22)
-    print('\033[F' + '└' + '─' * 36 + '┘ └' + '─' * 37 + '┘')
+    print(('\n' + '│' + ' ' * midwidth + '│  │' + ' ' * midwidth + '│') * 11)
+    print('\033[F' + '└' + '─' * midwidth + '┘  └' + '─' * midwidth + '┘')
