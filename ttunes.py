@@ -119,5 +119,8 @@ while True:
         pass
     elif key in [13, 115, 32]:
         playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
+        if key == 13:
+            playback = True
+
     elif key == 17:
         break
