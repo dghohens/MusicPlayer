@@ -1,7 +1,8 @@
 """ This is the starting file for the Terminal Tunes program.
 """
 
-import msvcrt, configparser, FileSelection, WindowDisplay, Player2, vlc
+import msvcrt, configparser, FileSelection, WindowDisplay, Player2, gevent
+from gevent import sleep
 
 config = configparser.ConfigParser()
 config.read('playerConfig')
@@ -13,6 +14,7 @@ current_dir = parent_dir
 dircounter = 0
 dirlist = []
 playerinst = None
+seconds = 0
 
 
 # Key press actions. This needs to be changed to pull info from the playerConfig file.
@@ -98,29 +100,41 @@ print(dirs[4][dircounter])
 
 # Main loop
 
+def secondcount():
+    global seconds
+    sleep(1)
+    seconds += 1
+    print(seconds)
+    pass
 
-while True:
-    dircounter = dirs[3]
-    # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
-    key = ord(msvcrt.getch())
-    if key == 224:
-        key = ord(msvcrt.getch())
-    if key == 75 and (dirs[0] == parent_dir or dirs[0] == parent_dir + '\\'):
-        print('You are at the root music directory!')
-        pass
-    elif key in [72, 75, 77, 80]:
-        dirs = fileint(dirs[0], dirs[3], dirs[2], key_press(key))
+
+def main(dirs):
+    while True:
+        sleep(0)
         dircounter = dirs[3]
-        print(dircounter)
-        print(dirs[3])
-        print(dirs[4][dircounter])
-        # selected_directory = get_dir(current_working_directory)[0][dircounter]
-        #     return subdirs, selected_directory, selected_subdirs
-        pass
-    elif key in [13, 115, 32]:
-        playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
-        if key == 13:
-            playback = True
+        # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
+        key = ord(msvcrt.getch())
+        if key == 224:
+            key = ord(msvcrt.getch())
+        if key == 75 and (dirs[0] == parent_dir or dirs[0] == parent_dir + '\\'):
+            print('You are at the root music directory!')
+            pass
+        elif key in [72, 75, 77, 80]:
+            dirs = fileint(dirs[0], dirs[3], dirs[2], key_press(key))
+            dircounter = dirs[3]
+            print(dircounter)
+            print(dirs[3])
+            print(dirs[4][dircounter])
+            # selected_directory = get_dir(current_working_directory)[0][dircounter]
+            #     return subdirs, selected_directory, selected_subdirs
+            pass
+        elif key in [13, 115, 32]:
+            playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
+            if key == 13:
+                playback = True
+        elif key == 17:
+            break
 
-    elif key == 17:
-        break
+#gevent.joinall([gevent.spawn(main(dirs)), gevent.spawn(secondcount)])
+
+main(dirs)
