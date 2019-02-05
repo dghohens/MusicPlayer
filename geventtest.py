@@ -15,9 +15,14 @@ def secadd():
 
 
 def testinput():
-    a = input()
-    print(a)
-    sleep(0)
+    timeout = gevent.Timeout(1)
+    timeout.start()
+    try:
+        a = input()
+        print(a)
+        sleep(0)
+    except gevent.Timeout:
+        pass
 
 
 while True:
