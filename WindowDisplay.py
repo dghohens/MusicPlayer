@@ -26,7 +26,7 @@ os.system('cls')
 def colors(fore = 'white', back = 'black'):
     fore = fore.lower()
     back = back.lower()
-    print(fore, back)
+    #print(fore, back)
     # BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE
     # Fores
     if fore == 'black':

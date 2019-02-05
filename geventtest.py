@@ -4,16 +4,21 @@
 import gevent
 from gevent import sleep
 
-def foo():
-    for i in range(1,11):
-        print(i)
-        sleep(5)
+seconds = 0
+
+def secadd():
+    global seconds
+    seconds += 1
+    print(seconds)
+    sleep(1)
+    pass
 
 
-def bar():
-    for j in range(2,22,2):
-        print(j)
-        sleep(0)
+def testinput():
+    a = input()
+    print(a)
+    sleep(0)
 
 
-gevent.joinall([gevent.spawn(foo), gevent.spawn(bar)])
+while True:
+    gevent.joinall([gevent.spawn(secadd), gevent.spawn(testinput)])

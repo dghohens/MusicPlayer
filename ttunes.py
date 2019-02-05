@@ -22,56 +22,56 @@ def key_press(inkey):
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     action = ''
     type = ''
-    if key == 17:
+    if inkey == 17:
         # No longer in use, keeping it so I remember that ctrl+q is ASCII code 17.
         # Quit
         action = 'quit'
-    if key == 32:
+    if inkey == 32:
         # pause/play
         action = 'pauseplay'
-    if key == 115:
+    if inkey == 115:
         # stop
         action = 'stop'
-    if key == 100:
+    if inkey == 100:
         # skip forward
         action = 'fskip'
-    if key == 97:
+    if inkey == 97:
         # skip backward
         action = 'bskip'
-    if key == 120:
+    if inkey == 120:
         # toggle shuffle
         action = 'shuffleonoff'
-    if key == 61:
+    if inkey == 61:
         # turn up volume
         action = 'upvolume'
-    if key == 45:
+    if inkey == 45:
         # turn down volume
         action = 'downvolume'
-    if key == 62:
+    if inkey == 62:
         # play faster
         action = 'speedup'
-    if key == 60:
+    if inkey == 60:
         # play slower
         action = 'slowdown'
-    if key == 27:
+    if inkey == 27:
         # Go to file view
         action = 'fileview'
-    if key == 63:
+    if inkey == 63:
         # display help page
         action = 'help'
-    if key == 80:
+    if inkey == 80:
         # Select next directory
         action = 'nextdir'
-    if key == 72:
+    if inkey == 72:
         # select previous directory
         action = 'prevdir'
-    if key == 75:
+    if inkey == 75:
         # Go up a level
         action = 'uplevel'
-    if key == 77:
+    if inkey == 77:
         # Go down a level
         action = 'downlevel'
-    if key == 13:
+    if inkey == 13:
         # start playing
         action = 'play'
     return action
@@ -94,47 +94,60 @@ Player2.playsong('', '')
 
 dirs = fileint(parent_dir, dircounter, dirlist)
 
-print(dircounter)
-print(dirs[3])
-print(dirs[4][dircounter])
-
 # Main loop
+
 
 def secondcount():
     global seconds
     sleep(1)
     seconds += 1
+    print()
+    print()
     print(seconds)
-    pass
+    return seconds
 
 
 def main(dirs):
-    while True:
-        sleep(0)
-        dircounter = dirs[3]
-        # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
+    global seconds
+    secondcount()
+    sleep(0)
+    # seconds += 1
+    print(seconds)
+    dircounter = dirs[3]
+    # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
+    key = ord(msvcrt.getch())
+    if key == 224:
         key = ord(msvcrt.getch())
-        if key == 224:
-            key = ord(msvcrt.getch())
-        if key == 75 and (dirs[0] == parent_dir or dirs[0] == parent_dir + '\\'):
-            print('You are at the root music directory!')
-            pass
-        elif key in [72, 75, 77, 80]:
-            dirs = fileint(dirs[0], dirs[3], dirs[2], key_press(key))
-            dircounter = dirs[3]
-            print(dircounter)
-            print(dirs[3])
-            print(dirs[4][dircounter])
-            # selected_directory = get_dir(current_working_directory)[0][dircounter]
-            #     return subdirs, selected_directory, selected_subdirs
-            pass
-        elif key in [13, 115, 32]:
-            playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
-            if key == 13:
-                playback = True
-        elif key == 17:
-            break
+    if key == 75 and (dirs[0] == parent_dir or dirs[0] == parent_dir + '\\'):
+        print('You are at the root music directory!')
+        pass
+    elif key in [72, 75, 77, 80]:
+        dirs = fileint(dirs[0], dirs[3], dirs[2], key_press(key))
+        dircounter = dirs[3]
+        #print(dircounter)
+        #print(dirs[3])
+        #print(dirs[4][dircounter])
+        # selected_directory = get_dir(current_working_directory)[0][dircounter]
+        #     return subdirs, selected_directory, selected_subdirs
+        pass
+    elif key in [13, 115, 32]:
+        playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
+        if key == 13:
+            playback = True
+    elif key == 17:
+        print(seconds)
+        pass
+    else:
+        secondcount()
+        pass
 
-#gevent.joinall([gevent.spawn(main(dirs)), gevent.spawn(secondcount)])
 
-main(dirs)
+while True:
+    gevent.joinall([gevent.spawn(main(dirs)), gevent.spawn(secondcount)])
+    key = ord(msvcrt.getch())
+    if key == 224:
+        key = ord(msvcrt.getch())
+    elif key == 17:
+        break
+
+# main(dirs)
