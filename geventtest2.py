@@ -14,7 +14,7 @@ def test1():
         a = input()
         print(a)
         pass
-    except Timeout:
+    except gevent.Timeout:
         test1()
 
 
