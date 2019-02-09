@@ -1,8 +1,7 @@
 """ This is the starting file for the Terminal Tunes program.
 """
 
-import msvcrt, configparser, FileSelection, WindowDisplay, Player2, gevent
-from gevent import sleep
+import msvcrt, configparser, FileSelection, WindowDisplay, Player2, multiprocessing
 
 config = configparser.ConfigParser()
 config.read('playerConfig')
@@ -87,6 +86,13 @@ def fileint(current_directory, dircount, directorylist, action = ''):
     WindowDisplay.file_window(directories[4], directories[4][dircount], directories[6], dircount)
     return directories
 
+def secondcount():
+    global seconds
+    seconds += 1
+    print(seconds)
+    pass
+
+
 # Song playing interface
 
 # Initialize music player and get all the startup errors out
@@ -95,24 +101,7 @@ Player2.playsong('', '')
 dirs = fileint(parent_dir, dircounter, dirlist)
 
 # Main loop
-
-
-def secondcount():
-    global seconds
-    sleep(1)
-    seconds += 1
-    print()
-    print()
-    print(seconds)
-    return seconds
-
-
-def main(dirs):
-    global seconds
-    secondcount()
-    sleep(0)
-    # seconds += 1
-    print(seconds)
+while True:
     dircounter = dirs[3]
     # https://stackoverflow.com/questions/12175964/python-method-for-reading-keypress
     key = ord(msvcrt.getch())
@@ -124,9 +113,9 @@ def main(dirs):
     elif key in [72, 75, 77, 80]:
         dirs = fileint(dirs[0], dirs[3], dirs[2], key_press(key))
         dircounter = dirs[3]
-        #print(dircounter)
-        #print(dirs[3])
-        #print(dirs[4][dircounter])
+        print(dircounter)
+        print(dirs[3])
+        print(dirs[4][dircounter])
         # selected_directory = get_dir(current_working_directory)[0][dircounter]
         #     return subdirs, selected_directory, selected_subdirs
         pass
@@ -134,20 +123,7 @@ def main(dirs):
         playerinst = Player2.playsong((dirs[0] + '\\' + dirs[1]), key_press(key), playerinst)
         if key == 13:
             playback = True
-    elif key == 17:
-        print(seconds)
-        pass
-    else:
-        secondcount()
-        pass
 
-
-while True:
-    gevent.joinall([gevent.spawn(main(dirs)), gevent.spawn(secondcount)])
-    key = ord(msvcrt.getch())
-    if key == 224:
-        key = ord(msvcrt.getch())
     elif key == 17:
         break
 
-# main(dirs)
